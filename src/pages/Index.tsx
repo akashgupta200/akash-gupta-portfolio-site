@@ -69,7 +69,8 @@ const Index = () => {
       category: 'Cloud Platforms',
       items: [
         { name: 'AWS', icon: Cloud },
-        { name: 'Azure', icon: Cloud }
+        { name: 'Azure', icon: Cloud },
+        { name: 'OCI', icon: Cloud }
       ]
     },
     {
@@ -151,14 +152,23 @@ const Index = () => {
     {
       title: "CalHEERS DBA Support",
       description: "Comprehensive database administration for 50+ non-prod databases totaling ~100TB.",
-      technologies: ["PostgreSQL", "Oracle", "Jenkins", "Bash", "CloudWatch"],
+      technologies: ["PostgreSQL", "Oracle", "Jenkins", "Bash", "CloudWatch", "Python"],
       highlights: [
         "Supported as a cloud database administrator for CALHEERS production and 50+ non-prod databases of total ~100TB",
         "Engaged in RDS/Aurora Postgres database setup/migration (Tech Refresh)",
         "Took care of 20+ end-to-end feature release processes from DB end (GIT, Jenkins, launchpad, Liquibase, Management)",
         "Designed bash script to automate cross-schema foreign table import in Postgres across all environments",
         "Implemented database code deployment process through Jenkins",
-        "Developed AWR equivalent monitoring and database health check report generation job in Postgres using CloudWatch CLI, Python, and Jenkins"
+        "Developed AWR equivalent monitoring and database health check report generation job in Postgres using CloudWatch CLI, Python, and Jenkins",
+        "Supported in Oracle database migration from Exadata machine to AWS cloud",
+        "Managed Active Data Guard broker configuration for real-time reporting and Snapshot database for application testing",
+        "Implemented 50+ bash scripts, alerts, and reports as part of cloud cutover activity which helps in standardizing the CALHEERS operations (Automation)",
+        "Developed backup automation directly to S3 bucket using OSB in LT environment (Cloud, OSB)",
+        "Engaged in space management activity across 49+ databases (Compression, partitioning, Redefinition, Re-organization)",
+        "Led database patching activity across more than 90 environments including prod/non-prod/LT/Staging",
+        "Managed and set up FGA functionality for critical PII data (Auditing)",
+        "Monitored ETL load for DW databases Snowflake (Performance tuning, SQL analysis, OEM, Advisory)",
+        "Database patching, switchover, RMAN restore recovery, User management, tablespace management"
       ]
     },
     {
@@ -252,10 +262,13 @@ const Index = () => {
     "Department Ranker in ECE (130+ students)",
     "DR-2 in 3rd Semester with SGPA 9.8545",
     "DR-2 in 4th Semester with SGPA 9.8519",
+    "Received consolation prize in Techspardha event in NIT Kurukshetra",
     "District Rank 1 in UP Board 12th Examination (2016)",
     "District Rank 2 in UP Board 10th Examination (2014)",
     "Honored by DM and CM for being district topper",
-    "Atul Maheshwari Scholarship winner"
+    "Atul Maheshwari Scholarship winner",
+    "Participated in various tech contest at school level-PIET, Rem Tech Olympiad, ABESIT",
+    "Led cultural program's team at school level and grab district level certificate in speech competition"
   ];
 
   return (
@@ -317,12 +330,15 @@ const Index = () => {
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center px-4 bg-gray-900 pt-20">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Dark Rectangular Section */}
-          <div className="bg-gray-800 rounded-lg p-8 mb-8 border border-gray-700 shadow-xl animate-fade-in">
+        <div className="text-center max-w-5xl mx-auto">
+          {/* Enhanced Dark Rectangular Section */}
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-12 mb-8 border border-gray-700 shadow-2xl animate-fade-in relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-r from-green-900/10 to-transparent"></div>
+            
             {/* Profile Picture */}
-            <div className="mb-8">
-              <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-green-400">
+            <div className="mb-8 relative z-10">
+              <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-green-400 shadow-lg">
                 <img 
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" 
                   alt="Akash Gupta" 
@@ -331,22 +347,22 @@ const Index = () => {
               </div>
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-light text-gray-100 mb-4 tracking-wide">
+            <h1 className="text-6xl md:text-7xl font-light text-gray-100 mb-6 tracking-wide relative z-10">
               AKASH GUPTA
             </h1>
             
-            <div className="flex items-center justify-center mb-6">
-              <div className="h-px bg-gray-600 w-16"></div>
-              <div className="mx-4 px-4 py-1 bg-green-600 text-white text-sm font-medium tracking-wider">
+            <div className="flex items-center justify-center mb-8 relative z-10">
+              <div className="h-px bg-gray-600 w-20"></div>
+              <div className="mx-6 px-6 py-2 bg-green-600 text-white text-sm font-medium tracking-wider rounded">
                 ORACLE DBA • POSTGRES DBA • CLOUD ENGINEER
               </div>
-              <div className="h-px bg-gray-600 w-16"></div>
+              <div className="h-px bg-gray-600 w-20"></div>
             </div>
             
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
+            <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed font-light relative z-10">
               Database Administrator @ McKinsey & Company<br/>
               B.Tech in ECE from NIT Kurukshetra<br/>
-              <span className="text-green-400 font-medium">+91-9729044816 • ag7088920928@gmail.com</span>
+              <span className="text-green-400 font-medium">+91-9729044816 • akashgupta.tech00@gmail.com</span>
             </p>
           </div>
           
@@ -567,7 +583,7 @@ const Index = () => {
                 <span className="text-white text-lg">✉️</span>
               </div>
               <h3 className="text-gray-200 font-medium mb-2">Email</h3>
-              <p className="text-gray-400 text-sm">ag7088920928@gmail.com</p>
+              <p className="text-gray-400 text-sm">akashgupta.tech00@gmail.com</p>
             </div>
             
             <div className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700">
@@ -599,7 +615,7 @@ const Index = () => {
               </svg>
             </a>
             <a 
-              href="mailto:ag7088920928@gmail.com"
+              href="mailto:akashgupta.tech00@gmail.com"
               className="text-gray-400 hover:text-green-400 transition-colors duration-300"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
