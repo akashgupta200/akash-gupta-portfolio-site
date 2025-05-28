@@ -188,25 +188,25 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-100 font-inter">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-200 shadow-sm">
+      <nav className="fixed top-0 w-full bg-white backdrop-blur-sm z-50 border-b border-gray-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold text-gray-900 tracking-wide">
+          <div className="flex justify-between items-center py-3">
+            <div className="text-xl font-bold text-gray-900">
               AKASH GUPTA
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-6">
               {['about', 'projects', 'experience', 'education', 'skills', 'awards', 'interests', 'contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className={`capitalize transition-colors duration-300 font-medium tracking-wide ${
+                  className={`capitalize transition-colors duration-300 font-medium text-sm ${
                     activeSection === item 
-                      ? 'text-green-600 border-b-2 border-green-600' 
-                      : 'text-gray-700 hover:text-green-600'
+                      ? 'text-gray-900 border-b-2 border-gray-900' 
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   {item}
@@ -234,7 +234,7 @@ const Index = () => {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className="block w-full text-left capitalize text-gray-700 hover:text-green-600 transition-colors duration-300 font-medium"
+                  className="block w-full text-left capitalize text-gray-700 hover:text-gray-900 transition-colors duration-300 font-medium text-sm"
                 >
                   {item}
                 </button>
@@ -245,36 +245,39 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-50 to-green-50">
+      <section id="home" className="min-h-screen flex items-center justify-center px-4 bg-white pt-20">
         <div className="text-center max-w-4xl mx-auto">
+          {/* Profile Picture */}
           <div className="mb-8 animate-fade-in">
-            <div className="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 p-2">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-6xl font-bold text-green-600">
-                AG
-              </div>
+            <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gray-200">
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" 
+                alt="Akash Gupta" 
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-bold text-gray-900 mb-4 tracking-wider animate-fade-in">
+          <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-wide animate-fade-in">
             AKASH GUPTA
           </h1>
           
-          <div className="flex items-center justify-center mb-8">
-            <div className="h-px bg-gray-400 w-24"></div>
-            <div className="mx-6 px-6 py-2 bg-green-500 text-white rounded-full font-medium tracking-wider">
-              DBA • CLOUD ENGINEER • ORACLE EXPERT
+          <div className="flex items-center justify-center mb-6">
+            <div className="h-px bg-gray-300 w-16"></div>
+            <div className="mx-4 px-4 py-1 bg-gray-900 text-white text-sm font-medium tracking-wider">
+              ORACLE DBA • POSTGRES DBA • CLOUD ENGINEER
             </div>
-            <div className="h-px bg-gray-400 w-24"></div>
+            <div className="h-px bg-gray-300 w-16"></div>
           </div>
           
-          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in">
-            Oracle DBA/Postgres DBA/Cloud Engineer @ McKinsey & Company<br/>
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in font-light">
+            Database Administrator @ McKinsey & Company<br/>
             B.Tech in ECE from NIT Kurukshetra<br/>
-            <span className="text-green-600 font-medium">+91-9729044816 • ag7088920928@gmail.com</span>
+            <span className="text-gray-900 font-medium">+91-9729044816 • ag7088920928@gmail.com</span>
           </p>
           
           {/* Navigation Icons */}
-          <div className="flex justify-center space-x-8 animate-fade-in">
+          <div className="flex justify-center space-x-6 animate-fade-in">
             {[
               { icon: '💼', label: 'PROJECTS', section: 'projects' },
               { icon: '👨‍💼', label: 'EXPERIENCE', section: 'experience' },
@@ -285,13 +288,12 @@ const Index = () => {
               <button
                 key={index}
                 onClick={() => scrollToSection(item.section)}
-                className="flex flex-col items-center group hover:scale-110 transition-transform duration-300"
+                className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl mb-2 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-xl mb-2 group-hover:bg-gray-900 group-hover:text-white transition-colors duration-300">
                   {item.icon}
                 </div>
-                <span className="text-sm font-bold text-gray-700 tracking-wider">{item.label}</span>
-                <span className="text-xs text-gray-500 lowercase">{item.section}</span>
+                <span className="text-xs font-medium text-gray-700 tracking-wider">{item.label}</span>
               </button>
             ))}
           </div>
@@ -299,16 +301,16 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-4">
+      <section id="about" className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">ABOUT ME</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">ABOUT ME</h2>
           
-          <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+            <p className="text-base text-gray-700 leading-relaxed mb-6 font-light">
               I have extensive experience in database administration for Oracle and PostgreSQL, with a strong focus on ensuring high availability, performance optimization, and data integrity. Additionally, I possess significant expertise in cloud technologies, including AWS and Azure, enabling seamless database migrations, infrastructure management and cost optimization.
             </p>
             
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-base text-gray-700 leading-relaxed font-light">
               My skill set also includes automation through Bash scripting, streamlining operational tasks and enhancing efficiency. I am passionate about leveraging cutting-edge technologies to solve complex business challenges and drive operational excellence.
             </p>
 
@@ -317,7 +319,7 @@ const Index = () => {
                 href="https://akashgupta200.github.io/Resume/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-8 py-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all duration-300 transform hover:scale-105 font-medium tracking-wide"
+                className="inline-block px-6 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 font-medium tracking-wide text-sm"
               >
                 📋 VIEW COMPLETE DOCUMENTATION
               </a>
@@ -327,22 +329,22 @@ const Index = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 px-4 bg-gray-50">
+      <section id="projects" className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">PROJECTS & WORK</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">PROJECTS & WORK</h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {projects.map((project, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{project.title}</h3>
-                <p className="text-gray-700 mb-4 leading-relaxed">{project.description}</p>
+              <div key={index} className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-lg font-medium text-gray-900 mb-3">{project.title}</h3>
+                <p className="text-gray-700 mb-4 leading-relaxed text-sm font-light">{project.description}</p>
                 
                 <div className="mb-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">Key Contributions:</h4>
+                  <h4 className="font-medium text-gray-900 mb-2 text-sm">Key Contributions:</h4>
                   <ul className="space-y-1">
                     {project.highlights.map((highlight, idx) => (
-                      <li key={idx} className="text-gray-700 text-sm flex items-start">
-                        <span className="text-green-500 mr-2">❖</span>
+                      <li key={idx} className="text-gray-700 text-xs flex items-start font-light">
+                        <span className="text-gray-500 mr-2">❖</span>
                         {highlight}
                       </li>
                     ))}
@@ -351,7 +353,7 @@ const Index = () => {
                 
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                    <span key={techIndex} className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
                       {tech}
                     </span>
                   ))}
@@ -363,22 +365,22 @@ const Index = () => {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-20 px-4">
+      <section id="experience" className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">EXPERIENCE</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">EXPERIENCE</h2>
           
-          <div className="space-y-8">
+          <div className="space-y-6">
             {experience.map((exp, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+              <div key={index} className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">{exp.role}</h3>
-                    <p className="text-green-600 font-semibold">{exp.company}</p>
-                    <p className="text-gray-600">{exp.location}</p>
+                    <h3 className="text-lg font-medium text-gray-900">{exp.role}</h3>
+                    <p className="text-gray-900 font-medium">{exp.company}</p>
+                    <p className="text-gray-600 text-sm">{exp.location}</p>
                   </div>
-                  <span className="text-gray-500 font-medium mt-2 md:mt-0">{exp.duration}</span>
+                  <span className="text-gray-500 font-medium mt-2 md:mt-0 text-sm">{exp.duration}</span>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{exp.description}</p>
+                <p className="text-gray-700 leading-relaxed font-light text-sm">{exp.description}</p>
               </div>
             ))}
           </div>
@@ -386,22 +388,22 @@ const Index = () => {
       </section>
 
       {/* Education Section */}
-      <section id="education" className="py-20 px-4 bg-gray-50">
+      <section id="education" className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">EDUCATION</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">EDUCATION</h2>
           
-          <div className="space-y-6">
+          <div className="space-y-4">
             {education.map((edu, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+              <div key={index} className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-200">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">{edu.institution}</h3>
-                    <p className="text-green-600 font-semibold">{edu.degree}</p>
-                    {edu.field && <p className="text-gray-600">{edu.field}</p>}
+                    <h3 className="text-lg font-medium text-gray-900">{edu.institution}</h3>
+                    <p className="text-gray-900 font-medium">{edu.degree}</p>
+                    {edu.field && <p className="text-gray-600 text-sm">{edu.field}</p>}
                   </div>
                   <div className="text-right mt-2 md:mt-0">
-                    <p className="text-gray-500 font-medium">{edu.duration}</p>
-                    <p className="text-gray-700 font-semibold">{edu.grade}</p>
+                    <p className="text-gray-500 font-medium text-sm">{edu.duration}</p>
+                    <p className="text-gray-700 font-medium text-sm">{edu.grade}</p>
                   </div>
                 </div>
               </div>
@@ -411,17 +413,17 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 px-4">
+      <section id="skills" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">SKILLS</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">SKILLS</h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((skillCategory, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">{skillCategory.category}</h3>
+              <div key={index} className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <h3 className="text-base font-medium text-gray-900 mb-4 text-center">{skillCategory.category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {skillCategory.items.map((skill, skillIndex) => (
-                    <span key={skillIndex} className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                    <span key={skillIndex} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
                       {skill}
                     </span>
                   ))}
@@ -433,16 +435,16 @@ const Index = () => {
       </section>
 
       {/* Awards Section */}
-      <section id="awards" className="py-20 px-4 bg-gray-50">
+      <section id="awards" className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">AWARDS & CERTIFICATIONS</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">AWARDS & CERTIFICATIONS</h2>
           
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-3">
             {awards.map((award, index) => (
-              <div key={index} className="bg-white rounded-lg shadow p-4 border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <div key={index} className="bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-start">
-                  <span className="text-green-500 mr-3 mt-1">🏆</span>
-                  <p className="text-gray-700 font-medium">{award}</p>
+                  <span className="text-gray-500 mr-3 mt-1">🏆</span>
+                  <p className="text-gray-700 font-light text-sm">{award}</p>
                 </div>
               </div>
             ))}
@@ -451,12 +453,12 @@ const Index = () => {
       </section>
 
       {/* Interests Section */}
-      <section id="interests" className="py-20 px-4">
+      <section id="interests" className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-16 tracking-wide">INTERESTS</h2>
+          <h2 className="text-3xl font-light text-gray-900 text-center mb-12 tracking-wide">INTERESTS</h2>
           
-          <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+          <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+            <div className="space-y-6 text-base text-gray-700 leading-relaxed font-light">
               <p>
                 Outside of my professional life as a database administrator, I am passionate about music, both listening and singing. I find joy in exploring different genres and honing my vocal skills. I also enjoy solving puzzles, which helps me sharpen my problem-solving abilities and stay mentally agile.
               </p>
@@ -474,36 +476,36 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 bg-gray-50">
+      <section id="contact" className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-8 tracking-wide">LET'S CONNECT</h2>
-          <p className="text-xl text-gray-600 mb-12">
+          <h2 className="text-3xl font-light text-gray-900 mb-8 tracking-wide">LET'S CONNECT</h2>
+          <p className="text-lg text-gray-600 mb-12 font-light">
             Ready to discuss database solutions and cloud innovations.
           </p>
           
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-xl">✉️</span>
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-200">
+              <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">✉️</span>
               </div>
-              <h3 className="text-gray-900 font-bold mb-2">Email</h3>
-              <p className="text-gray-700">ag7088920928@gmail.com</p>
+              <h3 className="text-gray-900 font-medium mb-2">Email</h3>
+              <p className="text-gray-700 text-sm">ag7088920928@gmail.com</p>
             </div>
             
-            <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-xl">📱</span>
+            <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-200">
+              <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">📱</span>
               </div>
-              <h3 className="text-gray-900 font-bold mb-2">Phone</h3>
-              <p className="text-gray-700">+91-9729044816</p>
+              <h3 className="text-gray-900 font-medium mb-2">Phone</h3>
+              <p className="text-gray-700 text-sm">+91-9729044816</p>
             </div>
             
-            <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-xl">📍</span>
+            <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-200">
+              <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">📍</span>
               </div>
-              <h3 className="text-gray-900 font-bold mb-2">Location</h3>
-              <p className="text-gray-700">Gurgaon, India</p>
+              <h3 className="text-gray-900 font-medium mb-2">Location</h3>
+              <p className="text-gray-700 text-sm">Gurgaon, India</p>
             </div>
           </div>
           
@@ -512,17 +514,17 @@ const Index = () => {
               href="https://akashgupta200.github.io/Resume/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-green-500 transition-colors duration-300"
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
             >
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
             </a>
             <a 
               href="mailto:ag7088920928@gmail.com"
-              className="text-gray-600 hover:text-green-500 transition-colors duration-300"
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
             >
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M0 4v16h24v-16h-24zm22 2l-10 6-10-6h20zm-20 12v-10l8 5 4-2.5 8 5v2.5h-20z"/>
               </svg>
             </a>
@@ -531,9 +533,9 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 py-8 px-4">
+      <footer className="bg-gray-900 py-6 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm font-light">
             © 2024 Akash Gupta. All rights reserved. Built with modern web technologies.
           </p>
         </div>
