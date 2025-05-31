@@ -15,12 +15,39 @@ import {
   Globe,
   Shield,
   ExternalLink,
-  Download
+  Download,
+  BookOpen,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Load theme preference from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  useEffect(() => {
+    // Apply theme to document
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -283,9 +310,17 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 font-inter text-gray-100">
+    <div className={`min-h-screen font-inter transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gray-900 text-gray-100' 
+        : 'bg-gray-50 text-gray-900'
+    }`}>
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-gray-800 backdrop-blur-sm z-50 border-b border-gray-700 shadow-sm">
+      <nav className={`fixed top-0 w-full backdrop-blur-sm z-50 border-b shadow-sm transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200'
+      }`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-3">
             <div className="text-xl font-bold text-green-400">
@@ -293,7 +328,7 @@ const Index = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-6">
+            <div className="hidden md:flex space-x-6 items-center">
               {['about', 'projects', 'experience', 'education', 'skills', 'awards', 'interests', 'contact'].map((item) => (
                 <button
                   key={item}
@@ -301,25 +336,58 @@ const Index = () => {
                   className={`capitalize transition-colors duration-300 font-medium text-sm ${
                     activeSection === item 
                       ? 'text-green-400 border-b-2 border-green-400' 
-                      : 'text-gray-300 hover:text-green-400'
+                      : isDarkMode
+                        ? 'text-gray-300 hover:text-green-400'
+                        : 'text-gray-700 hover:text-green-400'
                   }`}
                 >
                   {item}
                 </button>
               ))}
+              
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-green-400 hover:bg-gray-700' 
+                    : 'text-gray-700 hover:text-green-400 hover:bg-gray-100'
+                }`}
+              >
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden text-gray-300"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <div className="w-6 h-6 flex flex-col justify-center items-center">
-                <span className={`block w-6 h-0.5 bg-gray-300 transition-transform duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1' : ''}`}></span>
-                <span className={`block w-6 h-0.5 bg-gray-300 mt-1 transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
-                <span className={`block w-6 h-0.5 bg-gray-300 mt-1 transition-transform duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1' : ''}`}></span>
-              </div>
-            </button>
+            <div className="md:hidden flex items-center space-x-2">
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-green-400' 
+                    : 'text-gray-700 hover:text-green-400'
+                }`}
+              >
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              
+              <button
+                className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <div className="w-6 h-6 flex flex-col justify-center items-center">
+                  <span className={`block w-6 h-0.5 transition-transform duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? 'rotate-45 translate-y-1' : ''}`}></span>
+                  <span className={`block w-6 h-0.5 mt-1 transition-opacity duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? 'opacity-0' : ''}`}></span>
+                  <span className={`block w-6 h-0.5 mt-1 transition-transform duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? '-rotate-45 -translate-y-1' : ''}`}></span>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu */}
@@ -329,7 +397,11 @@ const Index = () => {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className="block w-full text-left capitalize text-gray-300 hover:text-green-400 transition-colors duration-300 font-medium text-sm"
+                  className={`block w-full text-left capitalize transition-colors duration-300 font-medium text-sm ${
+                    isDarkMode 
+                      ? 'text-gray-300 hover:text-green-400' 
+                      : 'text-gray-700 hover:text-green-400'
+                  }`}
                 >
                   {item}
                 </button>
@@ -340,10 +412,16 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center px-4 bg-gray-900 pt-20">
+      <section id="home" className={`min-h-screen flex items-center justify-center px-4 pt-20 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <div className="text-center max-w-5xl mx-auto">
           {/* Enhanced Dark Rectangular Section */}
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-12 mb-8 border border-gray-700 shadow-2xl animate-fade-in relative overflow-hidden">
+          <div className={`rounded-xl p-12 mb-8 border shadow-2xl animate-fade-in relative overflow-hidden ${
+            isDarkMode 
+              ? 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700' 
+              : 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-600'
+          }`}>
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-gradient-to-r from-green-900/10 to-transparent"></div>
             
@@ -384,17 +462,30 @@ const Index = () => {
               { icon: '👨‍💼', label: 'EXPERIENCE', section: 'experience' },
               { icon: '📄', label: 'RESUME', section: 'resume', action: 'download' },
               { icon: 'ℹ️', label: 'ABOUT', section: 'about' },
+              { icon: '📚', label: 'DOCS', section: 'docs', action: 'external' },
               { icon: '✉️', label: 'CONTACT', section: 'contact' }
             ].map((item, index) => (
               <button
                 key={index}
-                onClick={() => item.action === 'download' ? handleResumeDownload() : scrollToSection(item.section)}
+                onClick={() => {
+                  if (item.action === 'download') {
+                    handleResumeDownload();
+                  } else if (item.action === 'external') {
+                    window.open('https://akora-knowledge-base.vercel.app/', '_blank');
+                  } else {
+                    scrollToSection(item.section);
+                  }
+                }}
                 className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-xl mb-2 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-2 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
                   {item.icon}
                 </div>
-                <span className="text-xs font-medium text-gray-400 tracking-wider">{item.label}</span>
+                <span className={`text-xs font-medium tracking-wider ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}>{item.label}</span>
               </button>
             ))}
           </div>
@@ -402,16 +493,28 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 px-4 bg-gray-800">
+      <section id="about" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">ABOUT ME</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>ABOUT ME</h2>
           
-          <div className="bg-gray-700 rounded-lg shadow-sm p-8 border border-gray-600">
-            <p className="text-base text-gray-300 leading-relaxed mb-6 font-light">
+          <div className={`rounded-lg shadow-sm p-8 border ${
+            isDarkMode 
+              ? 'bg-gray-700 border-gray-600' 
+              : 'bg-gray-50 border-gray-200'
+          }`}>
+            <p className={`text-base leading-relaxed mb-6 font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
               I have extensive experience in database administration for Oracle and Postgres, with a strong focus on ensuring high availability, performance optimization, and data integrity. Additionally, I possess significant expertise in cloud technologies, including AWS and Azure, enabling seamless database migrations, infrastructure management and cost optimization.
             </p>
             
-            <p className="text-base text-gray-300 leading-relaxed font-light">
+            <p className={`text-base leading-relaxed font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
               My skill set also includes automation through Bash scripting, streamlining operational tasks and enhancing efficiency. I am passionate about leveraging cutting-edge technologies to solve complex business challenges and drive operational excellence.
             </p>
 
@@ -429,7 +532,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 font-medium tracking-wide text-sm"
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
+                <BookOpen className="w-4 h-4 mr-2" />
                 DB/CLOUD KNOWLEDGE DOCUMENTATION
               </a>
             </div>
@@ -438,21 +541,35 @@ const Index = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-16 px-4 bg-gray-900">
+      <section id="projects" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">PROJECTS & WORK</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>PROJECTS & WORK</h2>
           
           <div className="grid md:grid-cols-2 gap-6">
             {projects.map((project, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700 hover:shadow-md transition-shadow duration-300">
+              <div key={index} className={`rounded-lg shadow-sm p-6 border hover:shadow-md transition-shadow duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
                 <h3 className="text-lg font-medium text-green-400 mb-3">{project.title}</h3>
-                <p className="text-gray-300 mb-4 leading-relaxed text-sm font-light">{project.description}</p>
+                <p className={`mb-4 leading-relaxed text-sm font-light ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>{project.description}</p>
                 
                 <div className="mb-4">
-                  <h4 className="font-medium text-gray-200 mb-2 text-sm">Key Contributions:</h4>
+                  <h4 className={`font-medium mb-2 text-sm ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                  }`}>Key Contributions:</h4>
                   <ul className="space-y-1">
                     {project.highlights.map((highlight, idx) => (
-                      <li key={idx} className="text-gray-300 text-xs flex items-start font-light">
+                      <li key={idx} className={`text-xs flex items-start font-light ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
                         <span className="text-green-400 mr-2">❖</span>
                         {highlight}
                       </li>
@@ -474,22 +591,38 @@ const Index = () => {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-16 px-4 bg-gray-800">
+      <section id="experience" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">EXPERIENCE</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>EXPERIENCE</h2>
           
           <div className="space-y-6">
             {experience.map((exp, index) => (
-              <div key={index} className="bg-gray-700 rounded-lg shadow-sm p-6 border border-gray-600">
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                   <div>
                     <h3 className="text-lg font-medium text-green-400">{exp.role}</h3>
-                    <p className="text-gray-200 font-medium">{exp.company}</p>
-                    <p className="text-gray-400 text-sm">{exp.location}</p>
+                    <p className={`font-medium ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                    }`}>{exp.company}</p>
+                    <p className={`text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{exp.location}</p>
                   </div>
-                  <span className="text-gray-400 font-medium mt-2 md:mt-0 text-sm">{exp.duration}</span>
+                  <span className={`font-medium mt-2 md:mt-0 text-sm ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{exp.duration}</span>
                 </div>
-                <p className="text-gray-300 leading-relaxed font-light text-sm">{exp.description}</p>
+                <p className={`leading-relaxed font-light text-sm ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>{exp.description}</p>
               </div>
             ))}
           </div>
@@ -497,21 +630,35 @@ const Index = () => {
       </section>
 
       {/* Education Section */}
-      <section id="education" className="py-16 px-4 bg-gray-900">
+      <section id="education" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">EDUCATION</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>EDUCATION</h2>
           
           <div className="space-y-4">
             {education.map((edu, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700">
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
                   <div>
                     <h3 className="text-lg font-medium text-green-400">{edu.institution}</h3>
-                    <p className="text-gray-200 font-medium">{edu.degree}</p>
-                    {edu.field && <p className="text-gray-400 text-sm">{edu.field}</p>}
+                    <p className={`font-medium ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                    }`}>{edu.degree}</p>
+                    {edu.field && <p className={`text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{edu.field}</p>}
                   </div>
                   <div className="text-right mt-2 md:mt-0">
-                    <p className="text-gray-400 font-medium text-sm">{edu.duration}</p>
+                    <p className={`font-medium text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{edu.duration}</p>
                     <p className="text-green-400 font-medium text-sm">{edu.grade}</p>
                   </div>
                 </div>
@@ -522,21 +669,33 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-16 px-4 bg-gray-800">
+      <section id="skills" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">SKILLS</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>SKILLS</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skillsData.map((skillCategory, index) => (
-              <div key={index} className="bg-gray-700 rounded-lg shadow-sm p-6 border border-gray-600">
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <h3 className="text-base font-medium text-green-400 mb-4 text-center">{skillCategory.category}</h3>
                 <div className="space-y-3">
                   {skillCategory.items.map((skill, skillIndex) => {
                     const IconComponent = skill.icon;
                     return (
-                      <div key={skillIndex} className="flex items-center space-x-3 p-2 bg-gray-800 rounded">
+                      <div key={skillIndex} className={`flex items-center space-x-3 p-2 rounded ${
+                        isDarkMode ? 'bg-gray-800' : 'bg-white'
+                      }`}>
                         <IconComponent className="w-5 h-5 text-green-400" />
-                        <span className="text-gray-300 text-sm font-medium">{skill.name}</span>
+                        <span className={`text-sm font-medium ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        }`}>{skill.name}</span>
                       </div>
                     );
                   })}
@@ -548,16 +707,26 @@ const Index = () => {
       </section>
 
       {/* Awards Section */}
-      <section id="awards" className="py-16 px-4 bg-gray-900">
+      <section id="awards" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">AWARDS & CERTIFICATIONS</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>AWARDS & CERTIFICATIONS</h2>
           
           <div className="grid md:grid-cols-2 gap-3">
             {awards.map((award, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-700 hover:shadow-md transition-shadow duration-300">
+              <div key={index} className={`rounded-lg shadow-sm p-4 border hover:shadow-md transition-shadow duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
                 <div className="flex items-start">
                   <span className="text-green-400 mr-3 mt-1">🏆</span>
-                  <p className="text-gray-300 font-light text-sm">{award}</p>
+                  <p className={`font-light text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{award}</p>
                 </div>
               </div>
             ))}
@@ -566,12 +735,22 @@ const Index = () => {
       </section>
 
       {/* Interests Section */}
-      <section id="interests" className="py-16 px-4 bg-gray-800">
+      <section id="interests" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-light text-gray-100 text-center mb-12 tracking-wide">INTERESTS</h2>
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>INTERESTS</h2>
           
-          <div className="bg-gray-700 rounded-lg shadow-sm p-8 border border-gray-600">
-            <div className="space-y-6 text-base text-gray-300 leading-relaxed font-light">
+          <div className={`rounded-lg shadow-sm p-8 border ${
+            isDarkMode 
+              ? 'bg-gray-700 border-gray-600' 
+              : 'bg-gray-50 border-gray-200'
+          }`}>
+            <div className={`space-y-6 text-base leading-relaxed font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
               <p>
                 Outside of my professional life as a database administrator, I am passionate about music, both listening and singing. I find joy in exploring different genres and honing my vocal skills. I also enjoy solving puzzles, which helps me sharpen my problem-solving abilities and stay mentally agile.
               </p>
@@ -589,36 +768,66 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 px-4 bg-gray-900">
+      <section id="contact" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-light text-gray-100 mb-8 tracking-wide">LET'S CONNECT</h2>
-          <p className="text-lg text-gray-400 mb-12 font-light">
+          <h2 className={`text-3xl font-light mb-8 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>LET'S CONNECT</h2>
+          <p className={`text-lg mb-12 font-light ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             Ready to discuss database solutions and cloud innovations.
           </p>
           
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700">
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
               <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-lg">✉️</span>
               </div>
-              <h3 className="text-gray-200 font-medium mb-2">Email</h3>
-              <p className="text-gray-400 text-sm">akashgupta.tech00@gmail.com</p>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Email</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>akashgupta.tech00@gmail.com</p>
             </div>
             
-            <div className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700">
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
               <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-lg">📱</span>
               </div>
-              <h3 className="text-gray-200 font-medium mb-2">Phone</h3>
-              <p className="text-gray-400 text-sm">+91-9729044816</p>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Phone</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>+91-9729044816</p>
             </div>
             
-            <div className="bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-700">
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
               <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-lg">📍</span>
               </div>
-              <h3 className="text-gray-200 font-medium mb-2">Location</h3>
-              <p className="text-gray-400 text-sm">Gurgaon, India</p>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Location</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>Gurgaon, India</p>
             </div>
           </div>
           
@@ -627,7 +836,11 @@ const Index = () => {
               href="https://akashgupta200.github.io/Resume/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-green-400 transition-colors duration-300"
+              className={`transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'text-gray-400 hover:text-green-400' 
+                  : 'text-gray-600 hover:text-green-400'
+              }`}
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M0 4v16h24v-16h-24zm22 2l-10 6-10-6h20zm-20 12v-10l8 5 4-2.5 8 5v2.5h-20z"/>
@@ -635,7 +848,11 @@ const Index = () => {
             </a>
             <a 
               href="mailto:akashgupta.tech00@gmail.com"
-              className="text-gray-400 hover:text-green-400 transition-colors duration-300"
+              className={`transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'text-gray-400 hover:text-green-400' 
+                  : 'text-gray-600 hover:text-green-400'
+              }`}
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M0 4v16h24v-16h-24zm22 2l-10 6-10-6h20zm-20 12v-10l8 5 4-2.5 8 5v2.5h-20z"/>
@@ -646,9 +863,15 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 py-6 px-4 border-t border-gray-700">
+      <footer className={`py-6 px-4 border-t ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200'
+      }`}>
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-400 text-sm font-light">
+          <p className={`text-sm font-light ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             © 2024 Akash Gupta. All rights reserved. Built with modern web technologies.
           </p>
         </div>
