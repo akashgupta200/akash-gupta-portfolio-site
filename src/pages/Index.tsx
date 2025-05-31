@@ -1,35 +1,87 @@
-
-import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, ExternalLink, Download, Sun, Moon, BookOpen } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { 
+  Database, 
+  Cloud, 
+  Code, 
+  Server, 
+  Terminal, 
+  GitBranch, 
+  Settings, 
+  Monitor, 
+  Wrench,
+  Users,
+  Cpu,
+  HardDrive,
+  Globe,
+  Shield,
+  ExternalLink,
+  Download,
+  BookOpen,
+  Sun,
+  Moon
+} from 'lucide-react';
 
 const Index = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
+    // Load theme preference from localStorage
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldUseDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-    
-    setDarkMode(shouldUseDark);
-    document.documentElement.classList.toggle('dark', shouldUseDark);
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
   }, []);
 
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    document.documentElement.classList.toggle('dark', newDarkMode);
-    localStorage.setItem('theme', newDarkMode ? 'dark' : 'light');
+  useEffect(() => {
+    // Apply theme to document
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'projects', 'experience', 'education', 'skills', 'awards', 'interests', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+          
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsMenuOpen(false);
   };
 
   const handleResumeDownload = () => {
+    // Create a link to download the resume
     const link = document.createElement('a');
     link.href = '/resume/Akash_Gupta_Resume.pdf';
     link.download = 'Akash_Gupta_Resume.pdf';
@@ -38,420 +90,790 @@ const Index = () => {
     document.body.removeChild(link);
   };
 
+  const skillsData = [
+    {
+      category: 'Programming Languages & Tools',
+      items: [
+        { name: 'C', icon: Code },
+        { name: 'C++', icon: Code },
+        { name: 'HTML', icon: Globe },
+        { name: 'CSS', icon: Globe },
+        { name: 'SQL', icon: Database },
+        { name: 'Verilog', icon: Cpu },
+        { name: 'System Verilog', icon: Cpu }
+      ]
+    },
+    {
+      category: 'Cloud Platforms',
+      items: [
+        { name: 'AWS', icon: Cloud },
+        { name: 'Azure', icon: Cloud },
+        { name: 'OCI', icon: Cloud }
+      ]
+    },
+    {
+      category: 'Databases',
+      items: [
+        { name: 'Oracle', icon: Database },
+        { name: 'PostgreSQL', icon: Database },
+        { name: 'SQL Server', icon: Database },
+        { name: 'RDS', icon: Server },
+        { name: 'DynamoDB', icon: HardDrive },
+        { name: 'ElastiCache', icon: HardDrive },
+        { name: 'Aurora', icon: Database }
+      ]
+    },
+    {
+      category: 'Automation',
+      items: [
+        { name: 'Bash Scripting', icon: Terminal },
+        { name: 'Ansible', icon: Settings }
+      ]
+    },
+    {
+      category: 'Tools',
+      items: [
+        { name: 'Git', icon: GitBranch },
+        { name: 'Jenkins', icon: Settings },
+        { name: 'Nagios', icon: Monitor },
+        { name: 'OEM', icon: Monitor },
+        { name: 'Toad', icon: Wrench },
+        { name: 'SQL Developer', icon: Wrench },
+        { name: 'pgAdmin', icon: Wrench },
+        { name: 'Putty', icon: Terminal },
+        { name: 'DBeaver', icon: Wrench },
+        { name: 'Erwin Data Modeler', icon: Wrench }
+      ]
+    },
+    {
+      category: 'Operating Systems',
+      items: [
+        { name: 'Windows', icon: Monitor },
+        { name: 'Linux', icon: Terminal }
+      ]
+    }
+  ];
+
+  const projects = [
+    {
+      title: "Market Vision Database Management",
+      description: "Led seamless database migrations from on-premises data centers to AWS and Azure, including data center decommissioning.",
+      technologies: ["AWS", "Azure", "Oracle", "PostgreSQL"],
+      highlights: [
+        "Led seamless database migrations from on-premises data centers to AWS and Azure, including data center decommissioning",
+        "Optimized infrastructure by implementing cost-saving measures such as instance downsizing, disk/space management, and purging/archiving historical data",
+        "Performed health checks, monitoring, patching, backups, recovery, UAT refreshes, and performance tuning for multiple clients",
+        "Partnered with data specialists to deliver tailored database solutions based on client requirements",
+        "Supported the transition to Oracle Autonomous Database, enhancing RPO/RTO and reducing costs and manual effort"
+      ]
+    },
+    {
+      title: "CalHEERS Tools Databases Migration",
+      description: "Successfully migrated production and sandbox databases including Autosys, ALM, and RTC to cloud platforms.",
+      technologies: ["DMS", "Datapump", "Oracle RDS", "Toad"],
+      highlights: [
+        "Successfully migrated production and sandbox batch server backend database called Autosys through DMS",
+        "Successfully migrated production and sandbox application management database called ALM using Datapump, Toad",
+        "Successfully migrated production and sandbox ticketing application database called RTC to Oracle RDS"
+      ]
+    },
+    {
+      title: "Database Optimization Initiative",
+      description: "Established new data models and automated RDS snapshot extraction resulting in $0.3M/year savings.",
+      technologies: ["AWS", "CloudWatch", "Jenkins", "S3"],
+      highlights: [
+        "Established new data models that better aligned with evolving business needs",
+        "Led initiative to automate RDS snapshot extraction to S3, resulting in ~$0.3M/year savings in Aurora backup storage costs",
+        "Developed a Jenkins job utilizing CloudWatch metrics to capture database health checks, long-running queries, and historical data for PostgreSQL, replicating Oracle's AWR report functionality"
+      ]
+    },
+    {
+      title: "CalHEERS DBA Support",
+      description: "Comprehensive database administration for 50+ non-prod databases totaling ~100TB.",
+      technologies: ["PostgreSQL", "Oracle", "Jenkins", "Bash", "CloudWatch", "Python"],
+      highlights: [
+        "Supported as a cloud database administrator for CALHEERS production and 50+ non-prod databases of total ~100TB",
+        "Engaged in RDS/Aurora Postgres database setup/migration (Tech Refresh)",
+        "Took care of 20+ end-to-end feature release processes from DB end (GIT, Jenkins, launchpad, Liquibase, Management)",
+        "Designed bash script to automate cross-schema foreign table import in Postgres across all environments",
+        "Implemented database code deployment process through Jenkins",
+        "Developed AWR equivalent monitoring and database health check report generation job in Postgres using CloudWatch CLI, Python, and Jenkins",
+        "Supported in Oracle database migration from Exadata machine to AWS cloud",
+        "Managed Active Data Guard broker configuration for real-time reporting and Snapshot database for application testing",
+        "Implemented 50+ bash scripts, alerts, and reports as part of cloud cutover activity which helps in standardizing the CALHEERS operations (Automation)",
+        "Developed backup automation directly to S3 bucket using OSB in LT environment (Cloud, OSB)",
+        "Engaged in space management activity across 49+ databases (Compression, partitioning, Redefinition, Re-organization)",
+        "Led database patching activity across more than 90 environments including prod/non-prod/LT/Staging",
+        "Managed and set up FGA functionality for critical PII data (Auditing)",
+        "Monitored ETL load for DW databases Snowflake (Performance tuning, SQL analysis, OEM, Advisory)",
+        "Database patching, switchover, RMAN restore recovery, User management, tablespace management"
+      ]
+    },
+    {
+      title: "Large Scale Data Migration",
+      description: "Led migration of multiple Oracle databases to Cloud Aurora PostgreSQL with minimal downtime.",
+      technologies: ["Oracle", "Aurora PostgreSQL", "Change Data Capture"],
+      highlights: [
+        "Led the migration of multiple databases from Oracle databases running on on-premises data center to Cloud Aurora Postgres",
+        "Ensured minimal downtime using Change Data Capture mechanism and data integrity throughout the migration process"
+      ]
+    },
+    {
+      title: "Ansible Automation Tool",
+      description: "Designed automation tool from scratch using Bash and Ansible for database administration tasks.",
+      technologies: ["Bash", "Ansible", "Linux"],
+      highlights: [
+        "Designed this tool from scratch using Bash and open-source configuration management tool called Ansible",
+        "Set up multiple options like health check, user administration, space alert, etc. Other tasks can also be added"
+      ]
+    }
+  ];
+
+  const experience = [
+    {
+      company: "McKinsey & Company",
+      role: "Database Administrator II",
+      location: "Gurgaon, India",
+      duration: "09/2024 - Present",
+      description: "Leading database administration initiatives for enterprise clients with focus on Oracle and PostgreSQL systems."
+    },
+    {
+      company: "Deloitte",
+      role: "Consultant",
+      location: "Gurgaon, India", 
+      duration: "07/2023 - 09/2024",
+      description: "Provided expert consulting services for database optimization and cloud migration projects."
+    },
+    {
+      company: "Deloitte",
+      role: "Analyst",
+      location: "Gurgaon, India",
+      duration: "07/2020 - 07/2023",
+      description: "Specialized in database administration, performance tuning, and automation script development."
+    },
+    {
+      company: "MentorGraphics",
+      role: "HEP Trainee",
+      location: "Noida, India",
+      duration: "06/2019 - 07/2019",
+      description: "Gained hands-on experience in hardware engineering and database technologies."
+    }
+  ];
+
+  const education = [
+    {
+      institution: "National Institute of Technology, Kurukshetra",
+      degree: "Bachelor of Technology",
+      field: "Electronics and Communication Engineering",
+      duration: "August 2016 - May 2020",
+      grade: "CGPA: 9.5185"
+    },
+    {
+      institution: "Saraswati Vidhya Mandir Inter College, Shamli",
+      degree: "Senior Secondary (UP Board)",
+      field: "",
+      duration: "2016",
+      grade: "Percentage: 95%"
+    },
+    {
+      institution: "Saraswati Vidhya Mandir Inter College, Shamli", 
+      degree: "Secondary (UP Board)",
+      field: "",
+      duration: "2014",
+      grade: "Percentage: 92%"
+    }
+  ];
+
+  const awards = [
+    "AWS Cloud Practitioner Certificate (CLF-02)",
+    "AWS Solution Architect Associate Certificate", 
+    "Azure Data Engineer Associate (DP-203) Certificate",
+    "Azure Data Fundamentals (DP-900) Certificate",
+    "OCI Foundation Certificate",
+    "Oracle DBA 11g/12c Certificate from Udemy",
+    "Oracle Backup and Recovery Certificate from Udemy",
+    "Oracle DataGuard Admin Certificate from Udemy",
+    "PostgreSQL DBA Certificate from Udemy",
+    "Bash Scripting Certificate from Udemy",
+    "SQL Certificate from Udemy",
+    "Spot Award in Deloitte",
+    "Department Ranker in ECE (130+ students)",
+    "DR-2 in 3rd Semester with SGPA 9.8545",
+    "DR-2 in 4th Semester with SGPA 9.8519",
+    "Received consolation prize in Techspardha event in NIT Kurukshetra",
+    "District Rank 1 in UP Board 12th Examination (2016)",
+    "District Rank 2 in UP Board 10th Examination (2014)",
+    "Honored by DM and CM for being district topper",
+    "Atul Maheshwari Scholarship winner",
+    "Participated in various tech contest at school level-PIET, Rem Tech Olympiad, ABESIT",
+    "Led cultural program's team at school level and grab district level certificate in speech competition"
+  ];
+
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen font-inter transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gray-900 text-gray-100' 
+        : 'bg-gray-50 text-gray-900'
+    }`}>
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 backdrop-blur-md ${darkMode ? 'bg-gray-900/80 border-gray-700' : 'bg-white/80 border-gray-200'} border-b transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'} transition-colors duration-300`}>
-              Akash Gupta
+      <nav className={`fixed top-0 w-full backdrop-blur-sm z-50 border-b shadow-sm transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200'
+      }`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-3">
+            <div className="text-xl font-bold text-green-400">
+              AKASH GUPTA
             </div>
-            <div className="flex items-center space-x-8">
-              <div className="hidden md:flex space-x-8">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex space-x-6 items-center">
+              {['about', 'projects', 'experience', 'education', 'skills', 'awards', 'interests', 'contact'].map((item) => (
                 <button
-                  onClick={() => scrollToSection('about')}
-                  className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors duration-300`}
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className={`capitalize transition-colors duration-300 font-medium text-sm ${
+                    activeSection === item 
+                      ? 'text-green-400 border-b-2 border-green-400' 
+                      : isDarkMode
+                        ? 'text-gray-300 hover:text-green-400'
+                        : 'text-gray-700 hover:text-green-400'
+                  }`}
                 >
-                  About
+                  {item}
                 </button>
-                <button
-                  onClick={() => scrollToSection('experience')}
-                  className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors duration-300`}
-                >
-                  Experience
-                </button>
-                <button
-                  onClick={() => scrollToSection('projects')}
-                  className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors duration-300`}
-                >
-                  Projects
-                </button>
-                <button
-                  onClick={() => window.open('https://akora-knowledge-base.vercel.app/', '_blank')}
-                  className={`flex items-center space-x-1 ${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors duration-300`}
-                >
-                  <BookOpen size={16} />
-                  <span>Documentation</span>
-                </button>
-              </div>
-              <Button
-                onClick={toggleDarkMode}
-                variant="ghost"
-                size="sm"
-                className={`${darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'} transition-colors duration-300`}
+              ))}
+              
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-green-400 hover:bg-gray-700' 
+                    : 'text-gray-700 hover:text-green-400 hover:bg-gray-100'
+                }`}
               >
-                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              </Button>
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-green-400' 
+                    : 'text-gray-700 hover:text-green-400'
+                }`}
+              >
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              
+              <button
+                className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <div className="w-6 h-6 flex flex-col justify-center items-center">
+                  <span className={`block w-6 h-0.5 transition-transform duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? 'rotate-45 translate-y-1' : ''}`}></span>
+                  <span className={`block w-6 h-0.5 mt-1 transition-opacity duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? 'opacity-0' : ''}`}></span>
+                  <span className={`block w-6 h-0.5 mt-1 transition-transform duration-300 ${
+                    isDarkMode ? 'bg-gray-300' : 'bg-gray-700'
+                  } ${isMenuOpen ? '-rotate-45 -translate-y-1' : ''}`}></span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          <div className={`md:hidden transition-all duration-300 ${isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
+            <div className="py-4 space-y-4">
+              {['about', 'projects', 'experience', 'education', 'skills', 'awards', 'interests', 'contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className={`block w-full text-left capitalize transition-colors duration-300 font-medium text-sm ${
+                    isDarkMode 
+                      ? 'text-gray-300 hover:text-green-400' 
+                      : 'text-gray-700 hover:text-green-400'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="mb-8">
-              <img
-                src="/lovable-uploads/f1cf3515-e892-433e-8a1b-a18cbdc24020.png"
-                alt="Akash Gupta"
-                className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white shadow-lg"
-              />
+      <section id="home" className={`min-h-screen flex items-center justify-center px-4 pt-20 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="text-center max-w-5xl mx-auto">
+          {/* Enhanced Dark Rectangular Section */}
+          <div className={`rounded-xl p-12 mb-8 border shadow-2xl animate-fade-in relative overflow-hidden ${
+            isDarkMode 
+              ? 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700' 
+              : 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-600'
+          }`}>
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-r from-green-900/10 to-transparent"></div>
+            
+            {/* Profile Picture */}
+            <div className="mb-8 relative z-10">
+              <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-green-400 shadow-lg">
+                <img 
+                  src="/lovable-uploads/f1cf3515-e892-433e-8a1b-a18cbdc24020.png" 
+                  alt="Akash Gupta" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-              Hi, I'm <span className="text-blue-600">Akash Gupta</span>
+            
+            <h1 className="text-6xl md:text-7xl font-light text-gray-100 mb-6 tracking-wide relative z-10">
+              AKASH GUPTA
             </h1>
-            <p className={`text-xl md:text-2xl mb-8 max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-              Full Stack Developer passionate about building scalable web applications and cloud solutions
+            
+            <div className="flex items-center justify-center mb-8 relative z-10">
+              <div className="h-px bg-gray-600 w-20"></div>
+              <div className="mx-6 px-6 py-2 bg-green-600 text-white text-sm font-medium tracking-wider rounded">
+                ORACLE DBA • POSTGRES DBA • CLOUD ENGINEER
+              </div>
+              <div className="h-px bg-gray-600 w-20"></div>
+            </div>
+            
+            <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed font-light relative z-10">
+              Database Administrator @ McKinsey & Company<br/>
+              B.Tech in ECE from NIT Kurukshetra<br/>
+              <span className="text-green-400 font-medium">+91-9729044816 • akashgupta.tech00@gmail.com</span>
             </p>
-            <div className="flex justify-center space-x-6 mb-8">
-              <a
-                href="https://github.com/gupta19akash"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors duration-300`}
-              >
-                <Github size={24} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/akash-gupta-5b5885221/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors duration-300`}
-              >
-                <Linkedin size={24} />
-              </a>
-              <a
-                href="mailto:gupta19akash@gmail.com"
-                className={`${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors duration-300`}
-              >
-                <Mail size={24} />
-              </a>
+          </div>
+          
+          {/* Navigation Icons */}
+          <div className="flex justify-center space-x-6 animate-fade-in">
+            {[
+              { icon: '💼', label: 'PROJECTS', section: 'projects' },
+              { icon: '👨‍💼', label: 'EXPERIENCE', section: 'experience' },
+              { icon: '📄', label: 'RESUME', section: 'resume', action: 'download' },
+              { icon: 'ℹ️', label: 'ABOUT', section: 'about' },
+              { icon: '📚', label: 'DOCS', section: 'docs', action: 'external' },
+              { icon: '✉️', label: 'CONTACT', section: 'contact' }
+            ].map((item, index) => (
               <button
-                onClick={() => window.open('https://akora-knowledge-base.vercel.app/', '_blank')}
-                className={`${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition-colors duration-300`}
+                key={index}
+                onClick={() => {
+                  if (item.action === 'download') {
+                    handleResumeDownload();
+                  } else if (item.action === 'external') {
+                    window.open('https://akora-knowledge-base.vercel.app/', '_blank');
+                  } else {
+                    scrollToSection(item.section);
+                  }
+                }}
+                className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                <BookOpen size={24} />
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-2 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
+                  {item.icon}
+                </div>
+                <span className={`text-xs font-medium tracking-wider ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}>{item.label}</span>
               </button>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <Button
-                onClick={() => scrollToSection('projects')}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                View My Work
-              </Button>
-              <Button
-                onClick={handleResumeDownload}
-                variant="outline"
-                className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'} transition-colors duration-300`}
-              >
-                <Download size={16} className="mr-2" />
-                Download Resume
-              </Button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-              About Me
-            </h2>
-            <p className={`text-lg max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-              I'm a passionate Full Stack Developer with expertise in modern web technologies and cloud platforms. 
-              I love creating efficient, scalable solutions and have a strong background in both frontend and backend development.
+      <section id="about" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>ABOUT ME</h2>
+          
+          <div className={`rounded-lg shadow-sm p-8 border ${
+            isDarkMode 
+              ? 'bg-gray-700 border-gray-600' 
+              : 'bg-gray-50 border-gray-200'
+          }`}>
+            <p className={`text-base leading-relaxed mb-6 font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              I have extensive experience in database administration for Oracle and Postgres, with a strong focus on ensuring high availability, performance optimization, and data integrity. Additionally, I possess significant expertise in cloud technologies, including AWS and Azure, enabling seamless database migrations, infrastructure management and cost optimization.
             </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                Skills & Technologies
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Frontend
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'].map((skill) => (
-                      <span
-                        key={skill}
-                        className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'} transition-colors duration-300`}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Backend
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['Node.js', 'Express.js', 'MongoDB', 'PostgreSQL', 'REST APIs'].map((skill) => (
-                      <span
-                        key={skill}
-                        className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'} transition-colors duration-300`}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Cloud & DevOps
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['AWS', 'Docker', 'Git', 'CI/CD', 'Linux'].map((skill) => (
-                      <span
-                        key={skill}
-                        className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'} transition-colors duration-300`}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
             
-            <div>
-              <h3 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                What I Do
-              </h3>
-              <div className="space-y-6">
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Web Development
-                  </h4>
-                  <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-300`}>
-                    Building responsive, user-friendly web applications with modern frameworks and best practices.
-                  </p>
-                </div>
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Cloud Solutions
-                  </h4>
-                  <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-300`}>
-                    Designing and implementing scalable cloud architectures using AWS services.
-                  </p>
-                </div>
-                <div>
-                  <h4 className={`font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'} transition-colors duration-300`}>
-                    Documentation
-                  </h4>
-                  <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-300`}>
-                    Creating comprehensive technical documentation and knowledge bases. Check out my{' '}
-                    <a
-                      href="https://akora-knowledge-base.vercel.app/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700 underline"
-                    >
-                      Akora Knowledge Base
-                    </a>
-                    {' '}for cloud and database documentation.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            <p className={`text-base leading-relaxed font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              My skill set also includes automation through Bash scripting, streamlining operational tasks and enhancing efficiency. I am passionate about leveraging cutting-edge technologies to solve complex business challenges and drive operational excellence.
+            </p>
 
-      {/* Experience Section */}
-      <section id="experience" className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-              Experience
-            </h2>
-          </div>
-          
-          <div className="space-y-8">
-            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-8 shadow-lg transition-colors duration-300`}>
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                <div>
-                  <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                    Full Stack Developer
-                  </h3>
-                  <p className="text-blue-600 font-semibold">Freelance</p>
-                </div>
-                <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} transition-colors duration-300`}>
-                  2023 - Present
-                </span>
-              </div>
-              <ul className={`list-disc list-inside space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-                <li>Developed and deployed full-stack web applications using React, Node.js, and cloud services</li>
-                <li>Implemented responsive designs and optimized application performance</li>
-                <li>Collaborated with clients to understand requirements and deliver solutions</li>
-                <li>Created comprehensive documentation and knowledge bases</li>
-              </ul>
-            </div>
-            
-            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-8 shadow-lg transition-colors duration-300`}>
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                <div>
-                  <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                    Web Development Intern
-                  </h3>
-                  <p className="text-blue-600 font-semibold">Various Companies</p>
-                </div>
-                <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} transition-colors duration-300`}>
-                  2022 - 2023
-                </span>
-              </div>
-              <ul className={`list-disc list-inside space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-                <li>Gained hands-on experience with modern web development technologies</li>
-                <li>Participated in code reviews and learned best practices</li>
-                <li>Contributed to team projects and learned agile development methodologies</li>
-              </ul>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={handleResumeDownload}
+                className="inline-flex items-center justify-center px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-all duration-300 transform hover:scale-105 font-medium tracking-wide text-sm"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                DOWNLOAD RESUME
+              </button>
+              <a 
+                href="https://akora-knowledge-base.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 font-medium tracking-wide text-sm"
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                DB/CLOUD KNOWLEDGE DOCUMENTATION
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-              Featured Projects
-            </h2>
-            <p className={`text-lg max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-              Here are some of the projects I've worked on that showcase my skills and experience.
-            </p>
-          </div>
+      <section id="projects" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="max-w-6xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>PROJECTS & WORK</h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className={`${darkMode ? 'bg-gray-900' : 'bg-gray-50'} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300`}>
-              <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                Akora Knowledge Base
-              </h3>
-              <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 transition-colors duration-300`}>
-                Comprehensive documentation website for cloud technologies and database management systems.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {['React', 'TypeScript', 'Tailwind CSS', 'Vercel'].map((tech) => (
-                  <span
-                    key={tech}
-                    className={`px-2 py-1 text-xs rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} transition-colors duration-300`}
-                  >
-                    {tech}
-                  </span>
-                ))}
+          <div className="grid md:grid-cols-2 gap-6">
+            {projects.map((project, index) => (
+              <div key={index} className={`rounded-lg shadow-sm p-6 border hover:shadow-md transition-shadow duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
+                <h3 className="text-lg font-medium text-green-400 mb-3">{project.title}</h3>
+                <p className={`mb-4 leading-relaxed text-sm font-light ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>{project.description}</p>
+                
+                <div className="mb-4">
+                  <h4 className={`font-medium mb-2 text-sm ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                  }`}>Key Contributions:</h4>
+                  <ul className="space-y-1">
+                    {project.highlights.map((highlight, idx) => (
+                      <li key={idx} className={`text-xs flex items-start font-light ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        <span className="text-green-400 mr-2">❖</span>
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech, techIndex) => (
+                    <span key={techIndex} className="px-2 py-1 bg-green-600 text-white rounded text-xs font-medium">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <a
-                href="https://akora-knowledge-base.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-blue-600 hover:text-blue-700"
-              >
-                View Project <ExternalLink size={16} className="ml-1" />
-              </a>
-            </div>
-            
-            <div className={`${darkMode ? 'bg-gray-900' : 'bg-gray-50'} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300`}>
-              <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                E-commerce Platform
-              </h3>
-              <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 transition-colors duration-300`}>
-                Full-stack e-commerce solution with user authentication, product management, and payment integration.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {['React', 'Node.js', 'MongoDB', 'Express.js'].map((tech) => (
-                  <span
-                    key={tech}
-                    className={`px-2 py-1 text-xs rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} transition-colors duration-300`}
-                  >
-                    {tech}
-                  </span>
-                ))}
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section id="experience" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>EXPERIENCE</h2>
+          
+          <div className="space-y-6">
+            {experience.map((exp, index) => (
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-medium text-green-400">{exp.role}</h3>
+                    <p className={`font-medium ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                    }`}>{exp.company}</p>
+                    <p className={`text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{exp.location}</p>
+                  </div>
+                  <span className={`font-medium mt-2 md:mt-0 text-sm ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{exp.duration}</span>
+                </div>
+                <p className={`leading-relaxed font-light text-sm ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>{exp.description}</p>
               </div>
-              <a
-                href="https://github.com/gupta19akash"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-blue-600 hover:text-blue-700"
-              >
-                View Code <ExternalLink size={16} className="ml-1" />
-              </a>
-            </div>
-            
-            <div className={`${darkMode ? 'bg-gray-900' : 'bg-gray-50'} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300`}>
-              <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-                Task Management App
-              </h3>
-              <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 transition-colors duration-300`}>
-                Collaborative task management application with real-time updates and team collaboration features.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {['React', 'Firebase', 'Material-UI', 'Real-time'].map((tech) => (
-                  <span
-                    key={tech}
-                    className={`px-2 py-1 text-xs rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} transition-colors duration-300`}
-                  >
-                    {tech}
-                  </span>
-                ))}
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Education Section */}
+      <section id="education" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>EDUCATION</h2>
+          
+          <div className="space-y-4">
+            {education.map((edu, index) => (
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                  <div>
+                    <h3 className="text-lg font-medium text-green-400">{edu.institution}</h3>
+                    <p className={`font-medium ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                    }`}>{edu.degree}</p>
+                    {edu.field && <p className={`text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{edu.field}</p>}
+                  </div>
+                  <div className="text-right mt-2 md:mt-0">
+                    <p className={`font-medium text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{edu.duration}</p>
+                    <p className="text-green-400 font-medium text-sm">{edu.grade}</p>
+                  </div>
+                </div>
               </div>
-              <a
-                href="https://github.com/gupta19akash"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-blue-600 hover:text-blue-700"
-              >
-                View Code <ExternalLink size={16} className="ml-1" />
-              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className="max-w-6xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>SKILLS</h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {skillsData.map((skillCategory, index) => (
+              <div key={index} className={`rounded-lg shadow-sm p-6 border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <h3 className="text-base font-medium text-green-400 mb-4 text-center">{skillCategory.category}</h3>
+                <div className="space-y-3">
+                  {skillCategory.items.map((skill, skillIndex) => {
+                    const IconComponent = skill.icon;
+                    return (
+                      <div key={skillIndex} className={`flex items-center space-x-3 p-2 rounded ${
+                        isDarkMode ? 'bg-gray-800' : 'bg-white'
+                      }`}>
+                        <IconComponent className="w-5 h-5 text-green-400" />
+                        <span className={`text-sm font-medium ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        }`}>{skill.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Awards Section */}
+      <section id="awards" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>AWARDS & CERTIFICATIONS</h2>
+          
+          <div className="grid md:grid-cols-2 gap-3">
+            {awards.map((award, index) => (
+              <div key={index} className={`rounded-lg shadow-sm p-4 border hover:shadow-md transition-shadow duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
+                <div className="flex items-start">
+                  <span className="text-green-400 mr-3 mt-1">🏆</span>
+                  <p className={`font-light text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{award}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Interests Section */}
+      <section id="interests" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className="max-w-4xl mx-auto">
+          <h2 className={`text-3xl font-light text-center mb-12 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>INTERESTS</h2>
+          
+          <div className={`rounded-lg shadow-sm p-8 border ${
+            isDarkMode 
+              ? 'bg-gray-700 border-gray-600' 
+              : 'bg-gray-50 border-gray-200'
+          }`}>
+            <div className={`space-y-6 text-base leading-relaxed font-light ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              <p>
+                Outside of my professional life as a database administrator, I am passionate about music, both listening and singing. I find joy in exploring different genres and honing my vocal skills. I also enjoy solving puzzles, which helps me sharpen my problem-solving abilities and stay mentally agile.
+              </p>
+              
+              <p>
+                When indoors, I am an avid follower of science fiction and fantasy movies and television shows. I am deeply motivated to stay updated with the latest advancements in technology, particularly in the fields of cloud computing and database management. This curiosity drives me to continuously learn and explore innovative solutions in my domain.
+              </p>
+              
+              <p>
+                Additionally, I enjoy participating in cultural activities and have a keen interest in public speaking and team leadership. These activities have helped me develop strong communication and collaboration skills, which I bring to both my personal and professional endeavors.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className={`text-3xl md:text-4xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-gray-900'} transition-colors duration-300`}>
-            Let's Work Together
-          </h2>
-          <p className={`text-lg mb-8 max-w-2xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'} transition-colors duration-300`}>
-            I'm always interested in new opportunities and exciting projects. 
-            Feel free to reach out if you'd like to collaborate!
+      <section id="contact" className={`py-16 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className={`text-3xl font-light mb-8 tracking-wide ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>LET'S CONNECT</h2>
+          <p className={`text-lg mb-12 font-light ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            Ready to discuss database solutions and cloud innovations.
           </p>
+          
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
+              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">✉️</span>
+              </div>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Email</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>akashgupta.tech00@gmail.com</p>
+            </div>
+            
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
+              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">📱</span>
+              </div>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Phone</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>+91-9729044816</p>
+            </div>
+            
+            <div className={`rounded-lg shadow-sm p-6 border ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700' 
+                : 'bg-white border-gray-200'
+            }`}>
+              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-lg">📍</span>
+              </div>
+              <h3 className={`font-medium mb-2 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}>Location</h3>
+              <p className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>Gurgaon, India</p>
+            </div>
+          </div>
+          
           <div className="flex justify-center space-x-6">
-            <a
-              href="mailto:gupta19akash@gmail.com"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300"
-            >
-              Get In Touch
-            </a>
-            <a
-              href="https://www.linkedin.com/in/akash-gupta-5b5885221/"
+            <a 
+              href="https://akashgupta200.github.io/Resume/"
               target="_blank"
               rel="noopener noreferrer"
-              className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800' : 'border-gray-300 text-gray-700 hover:bg-gray-50'} border px-8 py-3 rounded-lg font-semibold transition-colors duration-300`}
+              className={`transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'text-gray-400 hover:text-green-400' 
+                  : 'text-gray-600 hover:text-green-400'
+              }`}
             >
-              LinkedIn
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M0 4v16h24v-16h-24zm22 2l-10 6-10-6h20zm-20 12v-10l8 5 4-2.5 8 5v2.5h-20z"/>
+              </svg>
+            </a>
+            <a 
+              href="mailto:akashgupta.tech00@gmail.com"
+              className={`transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'text-gray-400 hover:text-green-400' 
+                  : 'text-gray-600 hover:text-green-400'
+              }`}
+            >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M0 4v16h24v-16h-24zm22 2l-10 6-10-6h20zm-20 12v-10l8 5 4-2.5 8 5v2.5h-20z"/>
+              </svg>
             </a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t transition-colors duration-300`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} transition-colors duration-300`}>
-              © 2024 Akash Gupta. All rights reserved.
-            </p>
-          </div>
+      <footer className={`py-6 px-4 border-t ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200'
+      }`}>
+        <div className="max-w-6xl mx-auto text-center">
+          <p className={`text-sm font-light ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            © 2024 Akash Gupta. All rights reserved. Built with modern web technologies.
+          </p>
         </div>
       </footer>
     </div>
